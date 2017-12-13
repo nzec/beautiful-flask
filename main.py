@@ -12,6 +12,7 @@ def channel(user):
 @app.route('/<blogpost>')
 def view_post(blogpost):
 	return render_template('blogpost.html',data=blogpost)
+
 	
 
 

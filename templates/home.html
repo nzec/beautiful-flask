@@ -11,13 +11,13 @@
 	<hr>
 </div>
 <div class="container">
-	{% for post in posts %}
+	{% for post in post_content %}
 	<a href = "/{{ post.title.string }}">
 		<div class="card" style="width: 100%">
 		  	<div class="card-body">
 		  			<div class="card-header">{{ post.title.string }}</div>
 		  			<div class="card-body">
-				    	<p class="card-text">{{ post.body.string }}...</p>
+				    	<p class="card-text">{{ post.p.string }}...</p>
 				    	 <p class="card-text"><small class="text-muted">Posted by <b>Admin</b> on <b>{{ post_date }}</b></small></p>
 				    </div>
 		  	</div>

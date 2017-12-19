@@ -3,13 +3,32 @@
 {% block title %}Login{{super()}}{% endblock %}
 
 {% block content %}
-	{% if strike == 1 %}
-	<h1>Wrong username or password</h1>
-	{% endif %}
-	<form action = "/login" method="post">
-	<input type="text" name="username"><br>
-	<input type="password" name="password"><br>
-	<input type="submit" name="submit">
-	</form>
+<div class="container hero">
+	<h1 class="text-center">Login</h1>
+	<p>CSI Multimedia Project</p>
+	<hr>
+</div>
+<form action = "/login" method="post" class="login">
+	<div class="container">
+		{% if strike == 1 %}
+		<script>
+			swal({
+	  			title: 'The Username or Password is incorrect.',
+				text: 'Please write correctly.',
+				type: 'error',
+			})
+		</script>
+		{% endif %}
+		<div class="form-group">
+			<label for="username">Username</label>
+			<input class="form-control" type="text" name="username" placeholder="Enter Username">
+		</div>
+		<div class="form-group">
+			<label for="password">Password</label>
+			<input class="form-control" type="password" name="password" placeholder="Enter Password">
+		</div>
+		<button type="submit" name="submit" class="btn btn-outline-dark btn-lg">Submit</button>
+	</div>
+</form>
 
 {% endblock %}

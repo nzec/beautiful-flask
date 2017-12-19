@@ -13,9 +13,9 @@ def index():
 	post_content = []
 	posts = os.listdir(post_directory)
 	for item in posts:
-		post_text =	BeautifulSoup(open(os.path.join(post_directory,item),'r').read(),'html.parser')
+		post_text =	BeautifulSoup(open(os.path.join(post_directory,item),'r').read()[:750],'html.parser')
 		post_content.append(post_text)
-	print(post_content)
+
 	return render_template('home.html',loggedin=loggedin,post_content=post_content)
 
 @app.route('/login',methods = ['GET','POST'])
@@ -28,7 +28,7 @@ def login():
 		username = request.form['username']
 		password = request.form['password']
 
-		resp= make_response(redirect('/'))
+		resp = make_response(redirect('/'))
 
 		if username == "admin" and password == "password":
 			resp.set_cookie('loggedin',"True")

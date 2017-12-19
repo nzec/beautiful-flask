@@ -1,2 +1,2 @@
 flask
-html2text
+bs4

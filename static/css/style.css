@@ -44,6 +44,15 @@ footer .social-list a:hover {
 footer h1 {
 	font-size: 20px;
 }
+footer span a {
+	color: #fff;
+	border: none !important;
+	padding: 0 !important;
+	text-decoration: underline;
+}
+footer span a:hover {
+	text-decoration: underline;
+}
 footer span {
 	opacity: 0.5;
 }
@@ -99,4 +108,10 @@ footer .col-md-6 a svg {
 }
 .success {
 	text-align: center;
+}
+.text-red {
+	color: red;
+}
+button {
+	cursor: pointer;
 }

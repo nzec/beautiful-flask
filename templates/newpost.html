@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block title %}Home{{ super() }}{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+<div class="container hero">
+	<h1 class="text-center">New Post</h1>
+	<p>CSI Multimedia Project</p>
+	<hr>
+</div>
+<form method="post" action="/newpost">
+	<div class="container">
+		<div class="form-group">
+			<label for="title">Title</label>
+			<input class="form-control" type="text" name="title" placeholder="Enter Title">
+			<small class="form-text text-muted">Make it catchy!</small>
+		</div>
+		<div class="form-group">
+			<label for="content">Content</label>
+			<textarea class="form-control" type="text" name="content" placeholder="Enter Text"></textarea>
+			<small class="form-text text-muted">HTML is Allowed.</small>
+		</div>
+		<div class="btn-group">
+			<button type="submit" class="btn btn-outline-dark" name="">Submit</button>
+			<button type="reset" class="btn btn-outline-danger">Reset</button>
+		</div>
+	</div>
+</form>
+{% endblock %}

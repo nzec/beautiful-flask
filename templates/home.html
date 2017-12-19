@@ -1,11 +1,28 @@
 {% extends "layout.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}Home{{ super() }}{% endblock %}
 {% block head %}
 {{ super() }}
 {% endblock %}
 
 {% block content %}
+<div class="container hero">
+	<h1 class="text-center">Home</h1>
+	<p>CSI Multimedia Project</p>
+	<hr>
+</div>
 <div class="container">
-	<h1 class="text-center">Cambridge School Indirapuram <i class="fas fa-graduation-cap"></i></h1>
+	{% for post in posts %}
+	<a href = "/{{ post }}">
+		<div class="card" style="width: 100%">
+		  	<div class="card-body">
+		  			<div class="card-header">{{ post }}</div>
+		  			<div class="card-body">
+				    	<p class="card-text">{{ post_content[loop.index-1] }}...</p>
+				    	 <p class="card-text"><small class="text-muted">Posted by <b>Admin</b> on <b>{{ post_date }}</b></small></p>
+				    </div>
+		  	</div>
+		</div>
+	</a>
+	{% endfor %}
 </div>
 {% endblock %}

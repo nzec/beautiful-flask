@@ -1,0 +1,6 @@
+{% extends "layout.html" %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+{% include "/blogposts/admin/" + post_link + ".html" %}
+{% endblock %}

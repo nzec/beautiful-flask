@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %}Published{{ super() }}{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+<div class="success">
+	<script>
+		swal({
+			title: 'Successfully Published.',
+			text: '{{ link }}',
+			type: 'success',
+			allowOutsideClick: false,
+			allowEscapeKey: false,
+			allowEnterKey: false,
+			confirmButtonText: 'Go to Post',
+			onClose: '{{ link }}'
+    		},function(isConfirm){
+            	alert('ok');
+          	});
+        	$('.swal2-confirm').click(function(){
+        	    window.location.href = '{{ link }}';
+        	});
+	</script>
+</div>
+{% endblock %}

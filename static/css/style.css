@@ -1,6 +1,102 @@
-.container {
-	padding-top: 100px;
+* {
+	font-family: Proxima Nova;
+	transition: 0.3s;
+}
+body {
+	overflow-x: hidden;
+}
+.container.hero {
+	padding-bottom: 30px;
 }
 .logo {
 	width: 40px;
+}
+footer a {
+	color: #fff;
+	text-decoration: none;
+}
+footer a:hover {
+	color: #fff;
+	text-decoration: none;
+}
+footer {
+	margin-top: 100px;
+	background: #292929;
+	color: #fff;
+}
+footer .row-social {
+	background: #383838;
+	padding: 10px 0 10px 30px;
+}
+footer .social-list {
+	margin: auto;
+	padding-left: 55%;
+}
+footer .social-list a {
+	margin: 10px;
+	font-size: 17px;
+	color: #fff;
+	opacity: .5;
+}
+footer .social-list a:hover {
+	opacity: 1;
+}
+footer h1 {
+	font-size: 20px;
+}
+footer span {
+	opacity: 0.5;
+}
+footer .row-copyright {
+	padding: 30px;
+}
+footer .col-md-6 a {
+	cursor: pointer;
+	opacity: 0.5;
+	padding: 10px;
+	border: solid #fff 2px;
+}
+footer .col-md-6 a:hover {
+	opacity: 1;
+}
+footer .col-md-6 a svg {
+	margin-left: 20px;
+}
+#content {
+	padding-top: 100px;
+}
+#content h1 {
+	font-size: 45px;
+	font-weight: bold;
+	text-transform: capitalize;
+}
+#content .hero {
+	text-align: center;
+}
+#content .card {
+	margin-bottom: 20px;
+	text-transform: capitalize;
+	text-decoration: none;
+}
+#content .card .card-header {
+	font-weight: bold;
+	font-size: 22px;
+}
+#content .card .card-text {
+	font-weight: thin;
+}
+#content a {
+	color: #212529;
+	text-decoration: none;
+}
+#content a:hover {
+	color: #0085a1;
+}
+#navbarSupportedContent {
+	position: absolute;
+	right: 0;
+	margin-right: 30px;
+}
+.success {
+	text-align: center;
 }

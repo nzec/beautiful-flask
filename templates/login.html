@@ -1,12 +1,15 @@
-{% extends "layouut.html" %}
+{% extends "layout.html" %}
 
-{% block title %}Login{{super()}} {% endblock %}
+{% block title %}Login{{super()}}{% endblock %}
 
 {% block content %}
+	{% if strike == 1 %}
+	<h1>Wrong username or password</h1>
+	{% endif %}
 	<form action = "/login" method="post">
 	<input type="text" name="username"><br>
 	<input type="password" name="password"><br>
 	<input type="submit" name="submit">
 	</form>
 
-{% endbock %}
+{% endblock %}

@@ -1,94 +1,82 @@
-from flask import Flask, render_template,request,url_for
+from flask import Flask, render_template,request,url_for,make_response,redirect
 import os
 import datetime
-import html2text
-#from flaskext.mysql import MySQL
+from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 
-# initializes mysql app
-#mysql = MySQL()
-#app.config['MYSQL_DATABASE_USER'] = 'ENTER YOUR USERNAME'
-#  change the password
-#app.config['MYSQL_DATABASE_PASSWORD'] = 'ENTER YOUR PASSWORD'
-#app.config['MYSQL_DATABASE_DB'] = 'testing'
-#app.config['MYSQL_DATABASE_HOST'] = 'localhost'
-#mysql.init_app(app)
-
-#cursor = mysql.connect().cursor()
-
 @app.route('/')
 def index():
+	loggedin = request.cookies.get('loggedin')
 	post_directory = os.path.join(os.path.join('templates','blogposts'),'admin')
 
-	post_text = []
-	post_links = []
 	post_content = []
 	posts = os.listdir(post_directory)
 	for item in posts:
-		post_content.append(html2text.html2text(open(os.path.join(post_directory,item),'r').read())[:300])
-		#post_text.append(post_content.read())
-		item = item[:-5]
-		post_links.append(item)
-
-	return render_template('home.html',posts=post_links,loggedin=True,post_content=post_content)
+		post_text =	BeautifulSoup(open(os.path.join(post_directory,item),'r').read(),'html.parser')
+		post_content.append(post_text)
+	print(post_content)
+	return render_template('home.html',loggedin=loggedin,post_content=post_content)
 
 @app.route('/login',methods = ['GET','POST'])
 def login():
 	if request.method == 'GET':
-		return render_template('login.html')	
+		return render_template('login.html',strike=0)	
 
 	elif request.method == 'POST':
 
 		username = request.form['username']
 		password = request.form['password']
 
-		cursor.execute("SELECT * from users where username ='" + username + "' and password='" + password + "'")
-		data = cursor.fetchone()
-		if data is None:
-			return "Username or Password is wrong"
-		else:
-			return "Logged in successfully"
+		resp= make_response(redirect('/'))
 
-@app.route('/dashboard')
-def dashboard():
-	return render_template('dashboard.html',user=user)
+		if username == "admin" and password == "password":
+			resp.set_cookie('loggedin',"True")
+			return resp
+		else:
+			resp.set_cookie('loggedin',"False")
+			return render_template('login.html',strike=1)
 
 @app.route('/newpost',methods=['GET','POST'])
 def newpost():
+	loggedin = request.cookies.get('loggedin')
+
 	if request.method == 'GET':
-		return render_template('newpost.html')
+		return render_template('newpost.html',loggedin=loggedin)
 
 	elif request.method == 'POST':
-		# do some stuff
-		post_content = request.form['content']
-		post_title = request.form['title']
+		if loggedin == "True":			
+			# do some stuff
+			post_content = request.form['content']
+			post_title = request.form['title']
 
-		post_directory = os.path.join(os.path.join('templates','blogposts'),'admin')
-		file = open(os.path.join(post_directory,'{}.html'.format(post_title)),'w')
+			post_directory = os.path.join(os.path.join('templates','blogposts'),'admin')
+			file = open(os.path.join(post_directory,'{}.html'.format(post_title)),'w')
 
-		file.write("""<div class="container hero"><h1>{}</h1><hr></div><div class="container"><p>{}</p></div>""".format(post_title,post_content))
-		file.close()
+			file.write("""<title>{}</title>
+				<body>
+				<div class="container hero"><h1>{}</h1><hr></div><div class="container"><p>{}</p></div>
+				</body>""".format(post_title,post_title,post_content))
+			file.close()
 
-		return render_template('success.html',link=post_title)
+			return render_template('success.html',link=post_title)
+		else:
+			return "Please log in to continue!"
 
-@app.route('/register',methods=['GET','POST'])
-def register():
-	if request.method == 'GET':
-		return render_template('login.html')
-
-	elif request.method =='POST':
-		username = request.form['username']
-		password = request.form['password']
-		cursor.execute("insert into users values('{}','{}');".format(username,password))
-		return "Registered"
+@app.route('/bla')
+def logout():
+	resp = make_response(redirect('/'))
+	resp.set_cookie('loggedin','False')
+	return resp
 
 @app.route('/<entry>/')
 def viewpost(entry):
+	loggedin = request.cookies.get('loggedin')
 	post_directory = os.path.join(os.path.join(os.path.join('templates','blogposts'),'admin'),'{}.html'.format(entry))
 	post_content = open(post_directory,'r').read()
 	
-	return render_template('blogpost.html',title=entry, post_link=entry)
+	return render_template('blogpost.html',title=entry, post_link=entry,loggedin=loggedin)
+
 
 if __name__ == '__main__':
 	app.run(host=os.getenv('IP', 'localhost'),port=int(os.getenv('PORT', 8080)),debug=True)

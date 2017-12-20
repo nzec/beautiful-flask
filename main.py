@@ -35,12 +35,14 @@ def login():
 		result = connection.execute('SELECT * FROM users WHERE username="{}" AND password="{}"'
 			.format(username,password))
 
-		if result :
+		for user in result:			
+
 			resp.set_cookie('loggedin',"True")
 			return resp
-		else:
-			resp.set_cookie('loggedin',"False")
-			return render_template('login.html',strike=1)
+
+		resp.set_cookie('loggedin',"False")
+		return render_template('login.html',strike=1)
+		
 
 @app.route('/newpost',methods=['GET','POST'])
 def newpost():

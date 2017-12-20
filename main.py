@@ -1,14 +1,16 @@
-from flask import Flask, render_template,request,url_for,make_response,redirect
+from flask import Flask, render_template,request,url_for,make_response,redirect,session
 import os
-import datetime
+import time
 from bs4 import BeautifulSoup
 import sqlite3
+import random
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = "HelloWorld"
 
 @app.route('/')
 def index():
-	loggedin = request.cookies.get('loggedin')
+	loggedin = session['loggedin']
 	post_directory = os.path.join(os.path.join('templates','blogposts'),'admin')
 
 	post_content = []
@@ -16,6 +18,10 @@ def index():
 	for item in posts:
 		post_text =	BeautifulSoup(open(os.path.join(post_directory,item),'r').read()[:750],'html.parser')
 		post_content.append(post_text)
+
+	post_text =	BeautifulSoup(open(os.path.join(post_directory,"bla.html"),'r').read()[:750],'html.parser')
+	
+	#return str(post_text.find("div",{"id":"author"}))
 
 	return render_template('home.html',loggedin=loggedin,post_content=post_content)
 
@@ -31,14 +37,13 @@ def login():
 		username = request.form['username']
 		password = request.form['password']
 
-		resp = make_response(redirect('/'))
 		result = connection.execute('SELECT * FROM users WHERE username="{}" AND password="{}"'
 			.format(username,password))
 
-		for user in result:			
-
-			resp.set_cookie('loggedin',"True")
-			return resp
+		for user in result:
+			session['loggedin'] = True
+			session['username'] = username
+			return redirect('/')
 
 		resp.set_cookie('loggedin',"False")
 		return render_template('login.html',strike=1)
@@ -46,7 +51,8 @@ def login():
 
 @app.route('/newpost',methods=['GET','POST'])
 def newpost():
-	loggedin = request.cookies.get('loggedin')
+	loggedin = session['loggedin']
+	post_author = session['username']
 
 	if request.method == 'GET':
 		return render_template('newpost.html',loggedin=loggedin)
@@ -63,7 +69,11 @@ def newpost():
 			file.write("""<title>{}</title>
 				<body>
 				<div class="container hero"><h1>{}</h1><hr></div><div class="container"><p>{}</p></div>
-				</body>""".format(post_title,post_title,post_content))
+				</body>
+				<div style="display: none;" id="metadata">
+				<div id="time">{}</div>
+				<div id="author">{}</div>
+				""".format(post_title,post_title,post_content,time.ctime(),'admin'))
 			file.close()
 
 			return render_template('success.html',link=post_title)
@@ -115,4 +125,4 @@ def register():
 
 if __name__ == '__main__':
 	app.run(host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)),debug=True)
-	#app.run(port=8080,debug=True,host="0.0.0.0")
+#app.run(port=8080,debug=True,host="0.0.0.0")

@@ -5,7 +5,6 @@ from bs4 import BeautifulSoup
 import sqlite3
 
 app = Flask(__name__)
-#cur.execute('CREATE table users(name varchar(60), username varchar(40),email varchar(40),password varchar(40))')
 
 @app.route('/')
 def index():
@@ -22,6 +21,8 @@ def index():
 
 @app.route('/login',methods = ['GET','POST'])
 def login():
+	connection = sqlite3.connect('blog-data.db')
+
 	if request.method == 'GET':
 		return render_template('login.html',strike=0)	
 
@@ -31,8 +32,10 @@ def login():
 		password = request.form['password']
 
 		resp = make_response(redirect('/'))
+		result = connection.execute('SELECT * FROM users WHERE username="{}" AND password="{}"'
+			.format(username,password))
 
-		if username == "admin" and password == "password":
+		if result :
 			resp.set_cookie('loggedin',"True")
 			return resp
 		else:
@@ -82,8 +85,11 @@ def viewpost(entry):
 @app.route('/register',methods=['GET','POST'])
 def register():
 	connection = sqlite3.connect('blog-data.db')
-
-	cur = connection.cursor()
+	try:
+		connection.execute('''CREATE table users(name varchar(60),
+		 username varchar(40),email varchar(40),password varchar(40))''')
+	except:
+		pass
 
 	if request.method == 'GET':
 		return render_template('register.html')
@@ -93,15 +99,17 @@ def register():
 		username = request.form['username']
 		password = request.form['password']
 		email = request.form['email']
-		cur.execute('insert into users values("{}","{}","{}","{}")'.format(name,username,email,password))
-		connection.commit()
-		connection.close()
-	
-		connection = sqlite3.connect('blog-data.db')
-		cur = connection.cursor()
+		connection.execute('INSERT INTO  users VALUES("{}","{}","{}","{}")'
+			.format(name,username,email,password))
 
+		cur = connection.execute('SELECT * FROM users')
+		array = []
+		for x in cur:
+			array.append(x)
 
-		return str(cur.execute('select * from users'))
+		connection.commit()		
+		return str(array)
+		#return str(cur.execute('SELECT  * FROM  users'))
 
 if __name__ == '__main__':
 	app.run(host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)),debug=True)

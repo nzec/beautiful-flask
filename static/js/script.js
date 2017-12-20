@@ -1,8 +1,4 @@
 $(document).ready(function() {
-	if ($(document).height() > $(window).height()) {
-		$( "footer" ).removeClass("fixed-bottom")
-	}
-
 	$('a[href*="#"]')
 	.not('[href="#"]')
 	.not('[href="#0"]')

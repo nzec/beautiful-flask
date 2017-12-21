@@ -1,7 +1,66 @@
-<form action="/register" method="post">
-<input type="text" name="name"><br>
-<input type="text" name="username"><br>
-<input type="email" name="email"><br>
-<input type="password" name="password"><br>
-<input type="submit" name="">
+{% extends "layout.html" %}
+
+{% block title %}Register{{super()}}{% endblock %}
+
+{% block content %}
+<div class="container hero">
+	<h1 class="text-center">Register</h1>
+	<p>CSI Multimedia Project</p>
+	<hr>
+</div>
+<form action = "/register" method="post" class="register">
+	<div class="container">
+		{% if strike == 1 %}
+		<script>
+			swal({
+	  			title: 'The Username has been taken.',
+				text: 'Please choose a different username.',
+				type: 'error',
+			})
+		</script>
+		{% elif strike == 2 %}
+		<script>
+			swal({
+				title: 'Email already registered',
+				text: 'This email has already been registered for an account.',
+				type: 'error',
+
+			})
+		</script>
+		{% elif strike == 3%}
+		<script>
+			swal({
+				title: "Passwords don't match.",
+				text: "Please try again.",
+				type: 'error',
+			})
+		</script>
+		{% endif %}
+		<div class="form-group">
+			<label for="full-name">Name</label>
+			<input class="form-control" type="text" name="full-name" placeholder="Enter Name">
+		</div>
+		<div class="form-group">
+			<label for="username">Username</label>
+			<input class="form-control" type="text" name="username" placeholder="Enter Username">
+		</div>
+		<div class="form-group">	
+			<label for="email">Email</label>
+			<input class="form-control" type="email" name="email" placeholder="Enter Email">
+		</div>
+		<div class="form-group">
+			<label for="password">Password</label>
+			<input class="form-control" type="password" name="password" placeholder="Enter Password">
+		</div>
+		<div class="form-group">
+			<label for="password">Confirm Password</label>
+			<input class="form-control" type="password" name="password-confirm" 
+			placeholder="Confirm Password">
+
+		</div>
+
+		<button type="submit" name="submit" class="btn btn-outline-dark btn-lg">Submit</button>
+	</div>
 </form>
+
+{% endblock %}

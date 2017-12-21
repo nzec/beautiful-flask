@@ -116,14 +116,27 @@ def register():
 		pass
 
 	if request.method == 'GET':
-		return render_template('register.html')
+		return render_template('register.html',strike=0)
 	
 	else:
-		name = request.form['name']
+		#name = request.form['full-name']
+		name = 'Ishaan'
 		username = request.form['username']
-		password = request.form['password']
 		email = request.form['email']
-		cur = connection.execute('SELECT * FROM users WHERE username = "{}" OR email = "{}"'.format(username,email))
+		password = request.form['password']
+		password_confirm = request.form['password-confirm']
+
+		cur = connection.execute('SELECT * FROM users WHERE username ="{}"'.format(username))
+		for item in cur:
+			return render_template('register.html',strike=1)
+		cur = connection.execute('SELECT * FROM users WHERE email = "{}"'.format(email))
+		
+		for item in cur:
+			return render_template('register.html',strike=2)
+		
+		if password != password_confirm:
+			return render_template('register.html',strike=3)
+
 		
 		connection.execute('INSERT INTO  users VALUES("{}","{}","{}","{}")'
 			.format(name,username,email,password))
@@ -135,4 +148,3 @@ def register():
 
 if __name__ == '__main__':
 	app.run(host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)),debug=True)
-#app.run(port=8080,debug=True,host="0.0.0.0")

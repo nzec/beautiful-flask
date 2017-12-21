@@ -26,7 +26,7 @@ def index():
 		posts = os.listdir(post_folder)
 
 		for item in posts:
-			post_text =	BeautifulSoup(open(os.path.join(post_folder,item),'r').read()[:750],'html.parser')
+			post_text =	BeautifulSoup(open(os.path.join(post_folder,item),'r').read(),'html.parser')
 			post_content.append(post_text)
 
 			

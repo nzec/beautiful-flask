@@ -15,15 +15,21 @@ def index():
 	except:
 		session['loggedin'] = False
 		loggedin = session['loggedin']
-	post_directory = os.path.join(os.path.join('templates','blogposts'),'admin')
+	
+	post_directory = os.path.join('templates','blogposts')
+	post_dirs = os.listdir(post_directory)
 
 	post_content = []
-	posts = os.listdir(post_directory)
-	for item in posts:
-		post_text =	BeautifulSoup(open(os.path.join(post_directory,item),'r').read()[:750],'html.parser')
-		post_content.append(post_text)
-
 	
+	for folder in post_dirs:
+		post_folder = os.path.join(post_directory,folder)
+		posts = os.listdir(post_folder)
+
+		for item in posts:
+			post_text =	BeautifulSoup(open(os.path.join(post_folder,item),'r').read()[:750],'html.parser')
+			post_content.append(post_text)
+
+			
 	return render_template('home.html',loggedin=loggedin,post_content=post_content)
 
 @app.route('/login',methods = ['GET','POST'])
@@ -61,8 +67,14 @@ def newpost():
 			post_content = request.form['content']
 			post_title = request.form['title']
 
+			post_directory = ""
+			try:
+				os.mkdir(os.path.join(os.path.join('templates','blogposts'),post_author))
+			except:
+				pass
+			
 			post_directory = os.path.join(os.path.join('templates','blogposts'),post_author)
-			file = open(os.path.join(post_directory,'{}.html'.format(post_title)),'w')
+			file = open(os.path.join(post_directory,post_title),'w')
 
 			file.write("""<title>{}</title>
 				<body>
@@ -84,10 +96,12 @@ def logout():
 	session['username'] = None
 	return redirect('/')
 
-@app.route('/<entry>/')
-def viewpost(entry):
+@app.route('/<post_author>/<entry>/')
+def viewpost(entry,post_author):
 	loggedin = request.cookies.get('loggedin')
-	post_directory = os.path.join(os.path.join(os.path.join('templates','blogposts'),'admin'),'{}.html'.format(entry))
+
+	post_directory = os.path.join(os.path.join(os.path.join('templates','blogposts'),post_author),'{}.html'
+		.format(entry))
 	post_content = open(post_directory,'r').read()
 	
 	return render_template('blogpost.html',title=entry, post_link=entry,loggedin=loggedin)

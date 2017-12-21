@@ -10,7 +10,11 @@ app.config['SECRET_KEY'] = "HelloWorld"
 
 @app.route('/')
 def index():
-	loggedin = session['loggedin']
+	try:
+		loggedin = session['loggedin']
+	except:
+		session['loggedin'] = False
+		loggedin = session['loggedin']
 	post_directory = os.path.join(os.path.join('templates','blogposts'),'admin')
 
 	post_content = []
@@ -19,10 +23,7 @@ def index():
 		post_text =	BeautifulSoup(open(os.path.join(post_directory,item),'r').read()[:750],'html.parser')
 		post_content.append(post_text)
 
-	post_text =	BeautifulSoup(open(os.path.join(post_directory,"bla.html"),'r').read()[:750],'html.parser')
 	
-	#return str(post_text.find("div",{"id":"author"}))
-
 	return render_template('home.html',loggedin=loggedin,post_content=post_content)
 
 @app.route('/login',methods = ['GET','POST'])
@@ -58,7 +59,7 @@ def newpost():
 		return render_template('newpost.html',loggedin=loggedin)
 
 	elif request.method == 'POST':
-		if loggedin == "True":			
+		if loggedin:			
 			# do some stuff
 			post_content = request.form['content']
 			post_title = request.form['title']
@@ -73,7 +74,7 @@ def newpost():
 				<div style="display: none;" id="metadata">
 				<div id="time">{}</div>
 				<div id="author">{}</div>
-				""".format(post_title,post_title,post_content,time.ctime(),'admin'))
+				""".format(post_title,post_title,post_content,time.ctime(),session['username']))
 			file.close()
 
 			return render_template('success.html',link=post_title)

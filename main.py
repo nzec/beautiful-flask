@@ -40,13 +40,10 @@ def login():
 
 		result = connection.execute('SELECT * FROM users WHERE username="{}" AND password="{}"'
 			.format(username,password))
-
 		for user in result:
 			session['loggedin'] = True
 			session['username'] = username
 			return redirect('/')
-
-		resp.set_cookie('loggedin',"False")
 		return render_template('login.html',strike=1)
 		
 
@@ -64,7 +61,7 @@ def newpost():
 			post_content = request.form['content']
 			post_title = request.form['title']
 
-			post_directory = os.path.join(os.path.join('templates','blogposts'),'admin')
+			post_directory = os.path.join(os.path.join('templates','blogposts'),post_author)
 			file = open(os.path.join(post_directory,'{}.html'.format(post_title)),'w')
 
 			file.write("""<title>{}</title>
@@ -83,9 +80,9 @@ def newpost():
 
 @app.route('/logout')
 def logout():
-	resp = make_response(redirect('/'))
-	resp.set_cookie('loggedin','False')
-	return resp
+	session['loggedin'] = False
+	session['username'] = None
+	return redirect('/')
 
 @app.route('/<entry>/')
 def viewpost(entry):
@@ -112,16 +109,14 @@ def register():
 		username = request.form['username']
 		password = request.form['password']
 		email = request.form['email']
+		cur = connection.execute('SELECT * FROM users WHERE username = "{}" OR email = "{}"'.format(username,email))
+		
 		connection.execute('INSERT INTO  users VALUES("{}","{}","{}","{}")'
 			.format(name,username,email,password))
 
-		cur = connection.execute('SELECT * FROM users')
-		array = []
-		for x in cur:
-			array.append(x)
+		connection.commit()
 
-		connection.commit()		
-		return str(array)
+		return str("registered")
 		#return str(cur.execute('SELECT  * FROM  users'))
 
 if __name__ == '__main__':

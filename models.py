@@ -8,7 +8,7 @@ class Blogpost:
 		self.datetime = time.ctime()
 		self.timestamp = time.time()
 		self.post_directory = self.make_directory()
-		self.post_id = self.remove_spaces() + ".html"
+		#self.post_id = self.remove_spaces()
 
 	def write_to_file(self,content):
 		self.content = content		

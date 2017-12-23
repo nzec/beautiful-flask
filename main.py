@@ -68,9 +68,8 @@ def newpost():
 			post_content = request.form['content']
 			post_title = request.form['title']
 			post_author = session['username']
-			blogpost = models.Blogpost(post_title,post_author)
 
-			
+			blogpost = models.Blogpost(post_title,post_author)
 			blogpost.write_to_file(post_content)
 
 			return render_template('success.html',link=post_title)

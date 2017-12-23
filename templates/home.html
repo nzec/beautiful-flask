@@ -10,6 +10,8 @@
 	<p>CSI Multimedia Project</p>
 	<hr>
 </div>
+
+
 <div class="container">
 	{% for post in post_content %}
 	<a href = "/{{ post.find('div',{'id':'author'}).string }}/{{ post.title.string }}">

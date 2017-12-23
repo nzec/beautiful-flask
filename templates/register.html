@@ -35,6 +35,15 @@
 				type: 'error',
 			})
 		</script>
+
+		{% elif strike == 4 %}
+		<script>
+			swal({
+				title: "Field Empty",
+				text: "The input fields cannot be empty.",
+				type: "error",
+			})
+		</script>
 		{% endif %}
 		<div class="form-group">
 			<label for="full-name">Name</label>

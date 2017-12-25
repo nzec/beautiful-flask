@@ -3,7 +3,6 @@ import os
 import sqlite3
 import hashlib
 
-
 class Blogpost:
 
 	def __init__(self,title=None,author=None):
@@ -23,6 +22,10 @@ class Blogpost:
 			<title>{}</title>
 			<body>
 				<div class="container hero"><h1>{}</h1><hr></div><div class="container"><p>{}</p></div>
+				<div style = "display: hidden;">
+				<div id = "author">{}</div>
+				<div id = "datetime">{}</div>
+				</div>
 			</body>
 			<div id="metadata" style = "display: hidden">
 			<div id = "author">{}</div>

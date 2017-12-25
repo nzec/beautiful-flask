@@ -11,6 +11,7 @@ class Blogpost:
 		self.author = author
 		self.datetime = time.ctime()
 		self.timestamp = time.time()
+
 		if self.author != None:
 			self.post_directory = self.make_directory()
 			self.post_id = self.remove_spaces()
@@ -24,7 +25,7 @@ class Blogpost:
 				<div class="container hero"><h1>{}</h1><hr></div><div class="container"><p>{}</p></div>
 				</div>
 			</body>
-			<div id="metadata" style = "display: hidden">
+			<div id="metadata" style = "display: none">
 			<div id = "author">{}</div>
 			<div id = "datetime">{}</div>
 			</div>
@@ -32,9 +33,9 @@ class Blogpost:
 		self.file.close()
 
 	def save(self,content):
-		self.conn.execute("""INSERT INTO posts (title, author, datetime, timestamp,path) VALUES('{}','{}','{}','{}','{}')
-			""".format(self.title,self.author,self.datetime,self.timestamp,
-				os.path.join(self.post_directory,
+		self.conn.execute("""INSERT INTO posts (title, author, datetime, timestamp,path) VALUES('{}','{}','{}',
+			'{}','{}')
+			""".format(self.title,self.author,self.datetime,self.timestamp,	os.path.join(self.post_directory,
 				self.post_id+".html")))
 
 		self.write_to_file(content)
@@ -92,3 +93,7 @@ class User:
 			return True
 		else:
 			return False
+	
+	def user_homepage(self):
+		cur = self.conn.execute("SELECT path FROM posts WHERE author = '{}'".format(username))
+		return cur

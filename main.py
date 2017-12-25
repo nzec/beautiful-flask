@@ -99,7 +99,6 @@ def register():
 		return render_template('register.html',strike=0)
 	
 	else:
-
 		name = request.form['full-name']
 		username = request.form['username']
 		email = request.form['email']

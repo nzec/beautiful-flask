@@ -11,12 +11,13 @@ class Blogpost:
 		self.author = author
 		self.datetime = time.ctime()
 		self.timestamp = time.time()
-		#self.post_directory = self.make_directory()
-		#self.post_id = self.remove_spaces()
+		if self.author != None:
+			self.post_directory = self.make_directory()
+			self.post_id = self.remove_spaces()
 
 	def write_to_file(self,content):
 		self.content = content		
-		self.file = open(os.path.join(self.post_directory,self.title),'w')
+		self.file = open(os.path.join(self.post_directory,self.post_id+".html"),'w')
 		self.file.write("""
 			<title>{}</title>
 			<body>
@@ -26,18 +27,22 @@ class Blogpost:
 		self.file.close()
 
 	def save(self,content):
-		self.conn.execute("""INSERT INTO posts VALUES('{}','{}','{}','{}','{}')
-			""".format(self.title,self.author,self.datetime,self.timestamp,self.post_directory))
+		self.conn.execute("""INSERT INTO posts (title, author, datetime, timestamp,path) VALUES('{}','{}','{}','{}','{}')
+			""".format(self.title,self.author,self.datetime,self.timestamp,
+				os.path.join(self.post_directory,
+				self.post_id+".html")))
 
 		self.write_to_file(content)
 		self.conn.commit()
 
 	def remove_spaces(self):
+		x=""
 		for char in range(len(self.title)):
-			print(char)
 			if self.title[char] == " ":
-				self.title[char] = ""
-		return self.title
+				x+=""
+			else:
+				x+=self.title[char]
+		return x
 	
 	def make_directory(self):
 		try:

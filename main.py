@@ -21,20 +21,14 @@ def check_session():
 def index():
 	loggedin = check_session()
 	blogpost = models.Blogpost()
-	posts = blogpost.conn.execute("SELECT * FROM posts")
 
-	post_directory = os.path.join('templates','blogposts')
-	post_dirs = os.listdir(post_directory)
+	posts = blogpost.conn.execute("SELECT path FROM posts ORDER BY timestamp DESC")
 
 	post_content = []
 	
-	for folder in post_dirs:
-		post_folder = os.path.join(post_directory,folder)
-		posts = os.listdir(post_folder)
-
-		for item in posts:
-			post_text =	BeautifulSoup(open(os.path.join(post_folder,item),'r').read(),'html.parser')
-			post_content.append(post_text)
+	for post in posts:
+		post_text =	BeautifulSoup(open(post[0],'r').read(),'html.parser')
+		post_content.append(post_text)
 
 			
 	return render_template('home.html',loggedin=loggedin,post_content=post_content)

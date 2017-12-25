@@ -20,8 +20,17 @@ def check_session():
 @app.route('/')
 def index():
 	loggedin = check_session()
-	blogpost = models.Blogpost('','')			
-	post_content = blogpost.list()
+
+	blogpost = models.Blogpost()
+
+	posts = blogpost.conn.execute("SELECT path FROM posts ORDER BY timestamp DESC")
+
+	post_content = []
+	
+	for post in posts:
+		post_text =	BeautifulSoup(open(post[0],'r').read(),'html.parser')
+		post_content.append(post_text)
+
 	return render_template('home.html',loggedin=loggedin,post_content=post_content)
 
 @app.route('/login',methods = ['GET','POST'])
@@ -60,7 +69,7 @@ def newpost():
 			post_author = session['username']
 
 			blogpost = models.Blogpost(post_title,post_author)
-			blogpost.write_to_file(post_content)
+			blogpost.save(post_content)
 
 			return render_template('success.html',link=post_title)
 		else:

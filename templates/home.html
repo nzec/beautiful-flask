@@ -24,7 +24,7 @@
 					    	{% else %}
 					    	<p class="card-text">{{ post.p.string }}</p>
 					    	{% endif %}
-					    	 <p class="card-text"><small class="text-muted">Posted by <b>{{ post.find("div",{"id":"author"}).string }}</b> on <b>{{ post.find("div",{"id":"time"}).string }}</b></small></p>
+					    	 <p class="card-text"><small class="text-muted">Posted by <b>{{ post.find("div",{"id":"author"}).string }}</b> on <b>{{ post.find("div",{"id":"datetime"}).string }}</b></small></p>
 			  				
 					    </div>
 			  	</div>

@@ -91,9 +91,24 @@ def viewpost(entry,post_author):
 	
 	return render_template('blogpost.html',title=entry, post_link=entry,loggedin=loggedin)
 
+@app.route('/<username>')
+def user_home(username):
+	loggedin = check_session()
+	user = models.User(username)
+	posts = user.user_homepage()
+
+	post_content = []
+	for post in posts:
+		post_text =	BeautifulSoup(open(post[0],'r').read(),'html.parser')
+		post_content.append(post_text)
+
+	return render_template('user-home.html',loggedin=loggedin,post_content=post_content,user=username,
+		full_name=user.get_name())
+
+
+
 @app.route('/register',methods=['GET','POST'])
-def register():
-	
+def register():	
 	
 	if request.method == 'GET':
 		return render_template('register.html',strike=0)
@@ -116,7 +131,7 @@ def register():
 		session['loggedin'] =True
 		session['username'] = username
 		
-		return render_template('home.html',strike=2)
+		return render_template('home.html',strike=0)
 
 if socket.gethostname() == "DESKTOP-D18" :
 	if __name__ == '__main__':

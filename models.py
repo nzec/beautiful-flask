@@ -28,8 +28,9 @@ class Blogpost:
 			<div id="metadata" style = "display: none">
 			<div id = "author">{}</div>
 			<div id = "datetime">{}</div>
+			<div id = "post_id">{}</div>
 			</div>
-			""".format(self.title,self.title,self.content,self.author,self.datetime))
+			""".format(self.title,self.title,self.content,self.author,self.datetime,self.post_id))
 		self.file.close()
 
 	def save(self,content):
@@ -66,7 +67,7 @@ class User:
 		self.password = password
 	
 	def register(self):
-		if self.name == None or self.email == None or self.password == None:
+		if self.name == "" or self.email == "" or self.password == "":
 			return 1
 
 		password_hashed = hashlib.new('sha224')
@@ -95,5 +96,12 @@ class User:
 			return False
 	
 	def user_homepage(self):
-		cur = self.conn.execute("SELECT path FROM posts WHERE author = '{}'".format(username))
+		cur = self.conn.execute("SELECT path FROM posts WHERE author = '{}' ORDER BY timestamp DESC"
+			.format(self.username))
 		return cur
+
+
+	def get_name(self):
+		cur = self.conn.execute("SELECT name FROM users WHERE username = '{}'".format(self.username))
+		for x in cur:
+			return x[0]

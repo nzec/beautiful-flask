@@ -135,7 +135,10 @@ def register():
 
 if socket.gethostname() == "DESKTOP-D18" :
 	if __name__ == '__main__':
+		app.secret_key=1
 		app.run(host=os.getenv('IP', '127.0.0.1'),port=int(os.getenv('PORT', 8080)),debug=True)
 else :
 	if __name__ == '__main__':
+		app.secret_key=1
+
 		app.run(host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)),debug=True)

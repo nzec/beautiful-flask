@@ -1,5 +1,6 @@
 import time
 import os
+from bs4 import BeautifulSoup
 
 class Blogpost:
 	def __init__(self,title,author):
@@ -35,3 +36,24 @@ class Blogpost:
 			pass
 		return os.path.join(os.path.join('templates','blogposts'),self.author)
 
+	def list(self,author=None):
+		root = os.path.join('templates','blogposts')
+		post_content = []
+		
+		if author == None:
+			
+			folders = os.listdir(root)
+			for folder in folders:
+				posts = os.listdir(os.path.join(root,folder))
+				for post in posts:					
+					post_text =	BeautifulSoup(open(os.path.join(os.path.join(root,folder),post),'r')
+						.read(),'html.parser')
+					post_content.append(post_text)
+		else:
+			folder = os.path.join(root,author)
+			posts = os.listdir(folder)
+			for post in posts:
+				post_text =	BeautifulSoup(open(os.path.join(folder,post),'r')
+						.read(),'html.parser')
+				post_content.append(post_text)
+		return post_content

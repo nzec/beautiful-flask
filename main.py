@@ -20,20 +20,8 @@ def check_session():
 @app.route('/')
 def index():
 	loggedin = check_session()
-	post_directory = os.path.join('templates','blogposts')
-	post_dirs = os.listdir(post_directory)
-
-	post_content = []
-	
-	for folder in post_dirs:
-		post_folder = os.path.join(post_directory,folder)
-		posts = os.listdir(post_folder)
-
-		for item in posts:
-			post_text =	BeautifulSoup(open(os.path.join(post_folder,item),'r').read(),'html.parser')
-			post_content.append(post_text)
-
-			
+	blogpost = models.Blogpost('','')			
+	post_content = blogpost.list()
 	return render_template('home.html',loggedin=loggedin,post_content=post_content)
 
 @app.route('/login',methods = ['GET','POST'])
@@ -65,6 +53,7 @@ def newpost():
 		return render_template('newpost.html',loggedin=loggedin)
 
 	elif request.method == 'POST':
+		
 		if loggedin:			
 			post_content = request.form['content']
 			post_title = request.form['title']

@@ -36,8 +36,7 @@ def index():
 
 @app.route('/login',methods = ['GET','POST'])
 def login():
-	connection = sqlite3.connect('blog-data.db')
-
+	
 	if request.method == 'GET':
 		return render_template('login.html',strike=0)	
 
@@ -45,10 +44,10 @@ def login():
 
 		username = request.form['username']
 		password = request.form['password']
-
-		result = connection.execute('SELECT * FROM users WHERE username="{}" AND password="{}"'
-			.format(username,password))
-		for user in result:
+		user = models.User(session['username'])
+		
+		result = user.authenticate(username,password)
+		if result == False:
 			session['loggedin'] = True
 			session['username'] = username
 			return redirect('/')

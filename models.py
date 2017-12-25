@@ -22,9 +22,6 @@ class Blogpost:
 			<title>{}</title>
 			<body>
 				<div class="container hero"><h1>{}</h1><hr></div><div class="container"><p>{}</p></div>
-				<div style = "display: hidden;">
-				<div id = "author">{}</div>
-				<div id = "datetime">{}</div>
 				</div>
 			</body>
 			<div id="metadata" style = "display: hidden">
@@ -87,7 +84,11 @@ class User:
 			self.conn.commit()
 			return 0
 
+	
 	def authenticate(self,uname,passwrd):
 		cur = self.conn.execute("SELECT * FROM users where username='{}' AND password='{}'".format(uname,
-			hashlib.sha224(b"{}".format(passwrd)).hexdigest()))
-		return cur
+			hashlib.sha224(bytes(passwrd,'utf-8')).hexdigest()))
+		if cur is True:
+			return True
+		else:
+			return False

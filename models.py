@@ -1,6 +1,7 @@
 import time
 import os
 import sqlite3
+import hashlib
 
 class Blogpost:
 
@@ -53,3 +54,36 @@ class Blogpost:
 		except:
 			pass
 		return os.path.join(os.path.join('templates','blogposts'),self.author)
+
+class User:
+	def __init__(self,username,name=None,email=None,password=None):
+		self.conn = sqlite3.connect('blog-data.db')
+		self.username = username
+		self.name = name
+		self.email = email
+		self.password = password
+	
+	def register(self):
+		if self.name == None or self.email == None or self.password == None:
+			return 1
+
+		password_hashed = hashlib.new('sha224')
+		password_hashed.update(bytes(self.password,'utf-8'))
+
+		same_email_wale = self.conn.execute("SELECT * FROM users where email = '{}'".format(self.email))
+		same_username_wale = self.conn.execute("SELECT * FROM users where username = '{}'".format(self.username))
+		
+		if same_username_wale is True:
+			return 2
+		elif same_email_wale is True:
+			return 3
+		else:
+			self.conn.execute("INSERT INTO users (name,username,email,password) VALUES('{}','{}','{}','{}')"
+				.format(self.name,self.username,self.email,password_hashed.hexdigest()))
+			self.conn.commit()
+			return 0
+
+	def authenticate(self,uname,passwrd):
+		cur = self.conn.execute("SELECT * FROM users where username='{}' AND password='{}'".format(uname,
+			hashlib.sha224(b"{}".format(passwrd)).hexdigest()))
+		return cur

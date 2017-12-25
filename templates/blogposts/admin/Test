@@ -1,4 +1,6 @@
-<title>Test</title>
-				<body>
+
+			<title>Test</title>
+			<body>
 				<div class="container hero"><h1>Test</h1><hr></div><div class="container"><p>Lorem Ipsum Dolor Sit Amet</p></div>
-				</body>
+			</body>
+			

@@ -20,6 +20,9 @@ def check_session():
 @app.route('/')
 def index():
 	loggedin = check_session()
+	blogpost = models.Blogpost()
+	posts = blogpost.conn.execute("SELECT * FROM posts")
+
 	post_directory = os.path.join('templates','blogposts')
 	post_dirs = os.listdir(post_directory)
 
@@ -71,7 +74,7 @@ def newpost():
 			post_author = session['username']
 
 			blogpost = models.Blogpost(post_title,post_author)
-			blogpost.write_to_file(post_content)
+			blogpost.save(post_content)
 
 			return render_template('success.html',link=post_title)
 		else:

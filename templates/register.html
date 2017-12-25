@@ -10,7 +10,7 @@
 </div>
 <form action = "/register" method="post" class="register">
 	<div class="container">
-		{% if strike == 1 %}
+		{% if strike == 2 %}
 		<script>
 			swal({
 	  			title: 'The Username has been taken.',
@@ -18,7 +18,7 @@
 				type: 'error',
 			})
 		</script>
-		{% elif strike == 2 %}
+		{% elif strike == 3 %}
 		<script>
 			swal({
 				title: 'Email already registered',
@@ -27,7 +27,7 @@
 
 			})
 		</script>
-		{% elif strike == 3%}
+		{% elif strike == 4%}
 		<script>
 			swal({
 				title: "Passwords don't match.",
@@ -36,7 +36,7 @@
 			})
 		</script>
 
-		{% elif strike == 4 %}
+		{% elif strike == 1 %}
 		<script>
 			swal({
 				title: "Field Empty",

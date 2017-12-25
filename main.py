@@ -6,6 +6,7 @@ import models
 import os
 import socket
 
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "HelloWorld"
 
@@ -93,42 +94,27 @@ def viewpost(entry,post_author):
 
 @app.route('/register',methods=['GET','POST'])
 def register():
-	connection = sqlite3.connect('blog-data.db')
-	try:
-		connection.execute('''CREATE table users(name varchar(60),
-		 username varchar(40),email varchar(40),password varchar(40))''')
-	except:
-		pass
-
+	
+	
 	if request.method == 'GET':
 		return render_template('register.html',strike=0)
 	
 	else:
+
 		name = request.form['full-name']
 		username = request.form['username']
 		email = request.form['email']
 		password = request.form['password']
 		password_confirm = request.form['password-confirm']
-
-		cur = connection.execute('SELECT * FROM users WHERE username ="{}"'.format(username))
-		for item in cur:
-			return render_template('register.html',strike=1)
-		cur = connection.execute('SELECT * FROM users WHERE email = "{}"'.format(email))
-		
-		for item in cur:
-			return render_template('register.html',strike=2)
 		
 		if password != password_confirm:
-			return render_template('register.html',strike=3)
-		
-		if name == None or username == None or email == None or password == None or password_confirm == None:
 			return render_template('register.html',strike=4)
-
 		
-		connection.execute('INSERT INTO  users VALUES("{}","{}","{}","{}")'
-			.format(name,username,email,password))
-
-		connection.commit()
+		user = models.User(username,name,email,password)
+		strike = user.register()
+		if strike != 0:
+			return render_template('register.html',strike=strike)
+		
 		session['loggedin'] =True
 		session['username'] = username
 		

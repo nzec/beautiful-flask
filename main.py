@@ -44,7 +44,7 @@ def login():
 
 		username = request.form['username']
 		password = request.form['password']
-		user = models.User(session['username'])
+		user = models.User(username)
 		
 		result = user.authenticate(username,password)
 		if result == False:

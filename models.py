@@ -1,11 +1,6 @@
 import time
 import os
-<<<<<<< HEAD
-from bs4 import BeautifulSoup
-=======
 import sqlite3
-
->>>>>>> dev
 
 class Blogpost:
 
@@ -26,8 +21,12 @@ class Blogpost:
 			<title>{}</title>
 			<body>
 				<div class="container hero"><h1>{}</h1><hr></div><div class="container"><p>{}</p></div>
+				<div style = "display: hidden;">
+				<div id = "author">{}</div>
+				<div id = "datetime">{}</div>
+				</div>
 			</body>
-			""".format(self.title,self.title,self.content))
+			""".format(self.title,self.title,self.content,self.author,self.datetime))
 		self.file.close()
 
 	def save(self,content):

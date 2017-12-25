@@ -27,6 +27,10 @@ class Blogpost:
 				<div id = "datetime">{}</div>
 				</div>
 			</body>
+			<div id="metadata" style = "display: hidden">
+			<div id = "author">{}</div>
+			<div id = "datetime">{}</div>
+			</div>
 			""".format(self.title,self.title,self.content,self.author,self.datetime))
 		self.file.close()
 

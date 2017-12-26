@@ -1,4 +1,4 @@
-<h1><center><img src="https://i.imgur.com/QF17bG7.png" width="500px"></center></h1>
+<h1 align="center"><center><img src="https://i.imgur.com/QF17bG7.png" width="500px"></center></h1>
 
 Beautiful Flask is a blog engine made on Flask. 
 

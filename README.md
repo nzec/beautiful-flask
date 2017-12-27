@@ -1,6 +1,7 @@
+
 <h1 align="center"><center><img src="https://i.imgur.com/QF17bG7.png" width="500px"></center></h1>
 
-Beautiful Flask is a blog engine made on Flask. 
+Beautiful Flask is a blog engine made on Flask. Made for a school project.
 
 #### Installation
 1. Clone the repository : `git clone https://github.com/duttaditya18/beautiful-flask.git`
@@ -8,4 +9,9 @@ Beautiful Flask is a blog engine made on Flask.
 3. Install Dependencies : `pip3 install flask bs4`
 4. Run : `cd beautiful-flask` and `python3 main.py`
 
+**Please note that this project is in its extremely beta phase. Expect errors! :smile:**
+
+---
+
 **Heroku :** https://beautiful-flask.herokuapp.com/
+

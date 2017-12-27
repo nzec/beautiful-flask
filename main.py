@@ -8,19 +8,20 @@ import socket
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "HelloWorld"
 
 def check_session():
 	try:
 		loggedin = session['loggedin']
 	except:
-		session['loggedin'] = False
+		session['loggedin'] = "False"
 		loggedin = session['loggedin']
+		
 	return loggedin
 
 @app.route('/')
 def index():
 	loggedin = check_session()
+	#loggedin = True
 
 	blogpost = models.Blogpost()
 
@@ -33,6 +34,7 @@ def index():
 		post_content.append(post_text)
 
 	return render_template('home.html',loggedin=loggedin,post_content=post_content)
+	#return "HelloWorld"
 
 @app.route('/login',methods = ['GET','POST'])
 def login():
@@ -48,7 +50,7 @@ def login():
 		
 		result = user.authenticate(username,password)
 		if result == False:
-			session['loggedin'] = True
+			session['loggedin'] = "True"
 			session['username'] = username
 			return redirect('/')
 		return render_template('login.html',strike=1)
@@ -77,8 +79,8 @@ def newpost():
 
 @app.route('/logout')
 def logout():
-	session['loggedin'] = False
-	session['username'] = None
+	session['loggedin'] = "False"
+	session['username'] = "None"
 	return redirect('/')
 
 @app.route('/<post_author>/<entry>/')
@@ -135,10 +137,9 @@ def register():
 
 if socket.gethostname() == "DESKTOP-D18" :
 	if __name__ == '__main__':
-		app.secret_key=1
+		app.secret_key=os.urandom(24)
 		app.run(host=os.getenv('IP', '127.0.0.1'),port=int(os.getenv('PORT', 8080)),debug=True)
 else :
 	if __name__ == '__main__':
-		app.secret_key=1
-
+		app.secret_key=os.urandom(24)
 		app.run(host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)),debug=True)

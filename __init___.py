@@ -154,6 +154,8 @@ def settings():
 			user = User(username)
 			name = request.form['name']
 			bio = request.form['bio']
+
+			user.update_settings(name=name,bio=bio)
 	else:
 		return redirect('/login')
 

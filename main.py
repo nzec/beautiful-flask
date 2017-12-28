@@ -74,7 +74,7 @@ def newpost():
 			blogpost = models.Blogpost(post_title,post_author)
 			blogpost.save(post_content)
 
-			return render_template('success.html',link=post_title)
+			return render_template('success.html',link=post_title,user=post_author)
 		else:
 			return "Please log in to continue!"
 

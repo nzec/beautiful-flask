@@ -1,11 +1,24 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<title>Error</title>
-</head>
-<body>
-	<h1>
-		404
-	</h1>
-</body>
-</html>
+<html lang="en">
+	<head>
+		<script type="text/javascript" src="{{ url_for('static',filename='js/sweetalert2.all.js')}}"></script>
+		<script type="text/javascript" src="{{ url_for('static',filename='js/jquery-3.2.1.min.js')}}"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			swal({
+	  			title: 'An error occured. Sorry!',
+				type: 'error',
+				allowOutsideClick: false,
+				allowEscapeKey: false,
+				allowEnterKey: false,
+				confirmButtonText: 'Go to Home',
+				onClose: '{{ link }}'
+	    		},function(isConfirm){
+            	alert('ok');
+	          	});
+	        	$('.swal2-confirm').click(function(){
+	        	    window.location.href = '/home';
+	        	});
+		</script>
+	</body>

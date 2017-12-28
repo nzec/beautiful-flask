@@ -143,8 +143,8 @@ def register():
 @app.route('/settings')
 def settings():
 	if request.method == 'GET':
-		pass
-
+		return render_template('settings.html')
+	
 
 
 if socket.gethostname() == "DESKTOP-D18" :

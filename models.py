@@ -76,10 +76,12 @@ class User:
 		same_email_wale = self.conn.execute("SELECT * FROM users where email = '{}'".format(self.email))
 		same_username_wale = self.conn.execute("SELECT * FROM users where username = '{}'".format(self.username))
 		
-		if same_username_wale is True:
+		for x in same_username_wale:			
 			return 2
-		elif same_email_wale is True:
+			break
+		for x in same_username_wale:			
 			return 3
+			break			
 		else:
 			self.conn.execute("INSERT INTO users (name,username,email,password) VALUES('{}','{}','{}','{}')"
 				.format(self.name,self.username,self.email,password_hashed.hexdigest()))
@@ -94,7 +96,7 @@ class User:
 			if hashlib.sha224(bytes(passwrd,'utf-8')).hexdigest() == x[0]:
 				return True
 				break
-				
+
 			else:
 				return False
 				break

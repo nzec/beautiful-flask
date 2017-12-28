@@ -131,7 +131,7 @@ class User:
 		cur = self.conn.execute("SELECT dp FROM users WHERE username = '{}' ".format(self.username))
 		for x in cur:
 			return x[0]
-	def get_time(self:
-		cur = self.conn.execute("SELECT datetime FROM users WHERE username = '{}' ".format(self.username)))
+	def get_time(self):
+		cur = self.conn.execute("SELECT datetime FROM users WHERE username = '{}' ".format(self.username))
 		for x in cur:
 			return x[0]

@@ -110,3 +110,6 @@ class User:
 		cur = self.conn.execute("SELECT name FROM users WHERE username = '{}'".format(self.username))
 		for x in cur:
 			return x[0]
+
+	def update_settings(self,name,bio):
+		self.conn.execute("""UPDATE users SET name = {}, bio={} WHERE username={}""".format(name,bio,self.username))

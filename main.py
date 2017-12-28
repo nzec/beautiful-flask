@@ -142,14 +142,20 @@ def register():
 
 @app.route('/settings')
 def settings():
-	if request.method == 'GET':
-		return render_template('settings.html')
+	username = session['username']
+	loggedin = session['loggedin']
+	
+	if loggedin:
 
+		if request.method == 'GET':
+			return render_template('settings.html')
+
+		else:
+			user = User(username)
+			name = request.form['name']
+			bio = request.form['bio']
 	else:
-		name = request.form['name']
-		bio = request.form['bio']
-		pass
-
+		return redirect('/login')
 
 if socket.gethostname() == "DESKTOP-D18" :
 	if __name__ == '__main__':

@@ -118,3 +118,6 @@ button {
 .reg-form {
 	display: flex;
 }
+.card-user {
+	padding: 0;
+}

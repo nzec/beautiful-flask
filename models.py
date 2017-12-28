@@ -18,7 +18,7 @@ class Blogpost:
 	def write_to_file(self,content):
 		self.content = content		
 		self.file = open(os.path.join(self.post_directory,self.title+".html"),'w')
-		self.file.write("""
+                self.file.write("""
 			<title>{}</title>
 			<body>
 				<div class="container hero"><h1>{}</h1><hr></div><div class="container"><p>{}</p></div>
@@ -132,6 +132,6 @@ class User:
 		for x in cur:
 			return x[0]
 	def get_time(self):
-		cur = self.conn.execute("SELECT datetime FROM users WHERE username = '{}' ".format(self.username))
+		cur = self.conn.execute("SELECT datetime FROM posts WHERE username = '{}' ".format(self.username))
 		for x in cur:
 			return x[0]

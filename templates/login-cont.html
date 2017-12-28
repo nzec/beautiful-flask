@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script type="text/javascript" src="{{ url_for('static',filename='js/sweetalert2.all.js')}}"></script>
+		<script type="text/javascript" src="{{ url_for('static',filename='js/jquery-3.2.1.min.js')}}"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			swal({
+	  			title: 'Please log in to continue..',
+				type: 'info',
+				allowOutsideClick: false,
+				allowEscapeKey: false,
+				allowEnterKey: false,
+				confirmButtonText: 'Log In',
+				onClose: '{{ link }}'
+	    		},function(isConfirm){
+            	alert('ok');
+	          	});
+	        	$('.swal2-confirm').click(function(){
+	        	    window.location.href = '/login';
+	        	});
+		</script>
+	</body>

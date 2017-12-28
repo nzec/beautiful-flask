@@ -13,5 +13,4 @@ Beautiful Flask is a blog engine made on Flask. Made for a school project.
 
 ---
 
-**Heroku :** https://beautiful-flask.herokuapp.com/
-
+**Heroku :** https://beautiful-flask.herokuapp.com/ (Not up to date.)

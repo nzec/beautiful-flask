@@ -13,7 +13,7 @@ def check_session():
 	try:
 		loggedin = session['loggedin']
 	except:
-		session['loggedin'] = "False"
+		session['loggedin'] = False
 		loggedin = session['loggedin']
 		
 	return loggedin
@@ -49,10 +49,11 @@ def login():
 		user = models.User(username)
 		
 		result = user.authenticate(username,password)
-		if result == False:
-			session['loggedin'] = "True"
+		if result == True:
+			session['loggedin'] = True
 			session['username'] = username
 			return redirect('/')
+
 		return render_template('login.html',strike=1)
 		
 
@@ -79,7 +80,7 @@ def newpost():
 
 @app.route('/logout')
 def logout():
-	session['loggedin'] = "False"
+	session['loggedin'] = False
 	session['username'] = "None"
 	return redirect('/')
 

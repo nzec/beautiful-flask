@@ -88,18 +88,21 @@ class User:
 
 	
 	def authenticate(self,uname,passwrd):
-		cur = self.conn.execute("SELECT * FROM users where username='{}' AND password='{}'".format(uname,
-			hashlib.sha224(bytes(passwrd,'utf-8')).hexdigest()))
-		if cur is True:
-			return True
-		else:
-			return False
-	
+		cur = self.conn.execute("SELECT password FROM users where username='{}'".format(uname))
+
+		for x in cur:			
+			if hashlib.sha224(bytes(passwrd,'utf-8')).hexdigest() == x[0]:
+				return True
+				break
+				
+			else:
+				return False
+				break
+		
 	def user_homepage(self):
 		cur = self.conn.execute("SELECT path FROM posts WHERE author = '{}' ORDER BY timestamp DESC"
 			.format(self.username))
 		return cur
-
 
 	def get_name(self):
 		cur = self.conn.execute("SELECT name FROM users WHERE username = '{}'".format(self.username))

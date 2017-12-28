@@ -132,6 +132,6 @@ class User:
 		for x in cur:
 			return x[0]
 	def get_time(self):
-		cur = self.conn.execute("SELECT datetime FROM posts WHERE username = '{}' ".format(self.username))
+		cur = self.conn.execute("SELECT datetime FROM posts WHERE author = '{}' ".format(self.username))
 		for x in cur:
 			return x[0]

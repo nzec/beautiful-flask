@@ -102,16 +102,17 @@ def viewpost(entry,post_author):
 		.format(entry))
 	post_content = open(post_directory,'r').read()
 	
-	return render_template('blogpost.html',title=entry, post_link=entry,loggedin=loggedin)
+	return render_template('blogpost.html',title=entry, post_link=entry,loggedin=loggedin,author=post_author)
 
 @app.route('/<username>')
+@app.route('/<username>/')
 def user_home(username):
 	loggedin = check_session()
 	user = models.User(username)
 	posts = user.user_homepage()
-	bio = "Lorem Ipsum"
-	dp_path = "https://avatars1.githubusercontent.com/u/28809479?s=460&v=4"
-	
+	bio = user.get_bio()
+	dp_path = user.get_avatar()
+
 	if not user.exists():
 		abort(404)	
 
@@ -151,7 +152,7 @@ def register():
 		session['loggedin'] =True
 		session['username'] = username
 		
-		return render_template('home.html',strike=0)
+		return redirect('/')
 
 @app.route('/settings')
 def settings():

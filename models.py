@@ -14,11 +14,10 @@ class Blogpost:
 
 		if self.author != None:
 			self.post_directory = self.make_directory()
-			self.post_id = self.remove_spaces()
 
 	def write_to_file(self,content):
 		self.content = content		
-		self.file = open(os.path.join(self.post_directory,self.post_id+".html"),'w')
+		self.file = open(os.path.join(self.post_directory,self.title+".html"),'w')
 		self.file.write("""
 			<title>{}</title>
 			<body>
@@ -28,16 +27,15 @@ class Blogpost:
 			<div id="metadata" style = "display: none">
 			<div id = "author">{}</div>
 			<div id = "datetime">{}</div>
-			<div id = "post_id">{}</div>
 			</div>
-			""".format(self.title,self.title,self.content,self.author,self.datetime,self.post_id))
+			""".format(self.title,self.title,self.content,self.author,self.datetime,self.title))
 		self.file.close()
 
 	def save(self,content):
 		self.conn.execute("""INSERT INTO posts (title, author, datetime, timestamp,path) VALUES('{}','{}','{}',
 			'{}','{}')
 			""".format(self.title,self.author,self.datetime,self.timestamp,	os.path.join(self.post_directory,
-				self.post_id+".html")))
+				self.title+".html")))
 
 		self.write_to_file(content)
 		self.conn.commit()
@@ -84,7 +82,7 @@ class User:
 			break			
 		else:
 			self.conn.execute("INSERT INTO users (name,username,email,password,bio,dp) VALUES('{}','{}','{}','{}','{}','{}')"
-				.format(self.name,self.username,self.email,password_hashed.hexdigest()),bio,avatar)
+.format(self.name,self.username,self.email,password_hashed.hexdigest(),bio,avatar))
 			self.conn.commit()
 			return 0
 
@@ -124,4 +122,12 @@ class User:
 			else:
 				return True
 			break
-		
+	
+	def get_bio(self):
+		cur = self.conn.execute("SELECT bio FROM users WHERE username = '{}' ".format(self.username))
+		for x in cur:
+			return x[0]	
+	def get_avatar(self):
+		cur = self.conn.execute("SELECT dp FROM users WHERE username = '{}' ".format(self.username))
+		for x in cur:
+			return x[0]

@@ -144,7 +144,11 @@ def register():
 def settings():
 	if request.method == 'GET':
 		return render_template('settings.html')
-	
+
+	else:
+		name = request.form['name']
+		bio = request.form['bio']
+		pass
 
 
 if socket.gethostname() == "DESKTOP-D18" :

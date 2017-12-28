@@ -20,6 +20,10 @@ def check_session():
 
 @app.route('/')
 def index():
+	return render_template('index.html')
+
+@app.route('/home')
+def home():
 	loggedin = check_session()
 	#loggedin = True
 
@@ -135,6 +139,13 @@ def register():
 		session['username'] = username
 		
 		return render_template('home.html',strike=0)
+
+@app.route('/settings')
+def settings():
+	if request.method == 'GET':
+		pass
+
+
 
 if socket.gethostname() == "DESKTOP-D18" :
 	if __name__ == '__main__':

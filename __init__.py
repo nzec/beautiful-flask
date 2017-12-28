@@ -23,6 +23,7 @@ def index():
 	return render_template('index.html')
 
 @app.errorhandler(404)
+@app.errorhandler(400)
 def page_not_found(e):
 	return render_template('error.html')
 
@@ -68,21 +69,21 @@ def newpost():
 	loggedin = check_session()	
 
 	if request.method == 'GET':
+		if not loggedin:
+			return render_template('login-cont.html')
 		return render_template('newpost.html',loggedin=loggedin)
 
 	elif request.method == 'POST':
 		
-		if loggedin:			
-			post_content = request.form['content']
-			post_title = request.form['title']
-			post_author = session['username']
+		post_content = request.form['content']
+		post_title = request.form['title']
+		post_author = session['username']
 
-			blogpost = models.Blogpost(post_title,post_author)
-			blogpost.save(post_content)
+		blogpost = models.Blogpost(post_title,post_author)
+		blogpost.save(post_content)
 
-			return render_template('success.html',link=post_title,user=post_author)
-		else:
-			return "Please log in to continue!"
+		return render_template('success.html',link=post_title,user=post_author)
+		
 
 @app.route('/logout')
 def logout():
@@ -102,7 +103,8 @@ def viewpost(entry,post_author):
 		.format(entry))
 	post_content = open(post_directory,'r').read()
 	
-	return render_template('blogpost.html',title=entry, post_link=entry,loggedin=loggedin,author=post_author)
+	return render_template('blogpost.html',title=entry, post_link=entry,loggedin=loggedin,author=post_author,
+		name=user.get_name(),datetime=user.get_time())
 
 @app.route('/<username>')
 @app.route('/<username>/')
@@ -152,25 +154,7 @@ def register():
 		session['loggedin'] =True
 		session['username'] = username
 		
-		return redirect('/')
-
-@app.route('/settings')
-def settings():
-	username = session['username']
-	loggedin = session['loggedin']
-	
-	if loggedin:
-		if request.method == 'GET':
-			return render_template('settings.html')
-
-		else:
-			user = User(username)
-			name = request.form['name']
-			bio = request.form['bio']
-
-			user.update_settings(name=name,bio=bio)
-	else:
-		return redirect('/login')
+		return redirect('/{}'.format(username))
 
 if socket.gethostname() == "DESKTOP-D18" :
 	if __name__ == '__main__':

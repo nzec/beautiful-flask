@@ -1,4 +1,4 @@
-from flask import Flask, render_template,request,url_for,make_response,redirect,session
+from flask import Flask, render_template,request,url_for,make_response,redirect,session,abort
 from bs4 import BeautifulSoup
 import sqlite3
 import random
@@ -22,10 +22,13 @@ def check_session():
 def index():
 	return render_template('index.html')
 
+@app.errorhandler(404)
+def page_not_found(e):
+	return render_template('error.html')
+
 @app.route('/home')
 def home():
 	loggedin = check_session()
-	#loggedin = True
 
 	blogpost = models.Blogpost()
 
@@ -38,7 +41,6 @@ def home():
 		post_content.append(post_text)
 
 	return render_template('home.html',loggedin=loggedin,post_content=post_content)
-	#return "HelloWorld"
 
 @app.route('/login',methods = ['GET','POST'])
 def login():
@@ -56,7 +58,7 @@ def login():
 		if result == True:
 			session['loggedin'] = True
 			session['username'] = username
-			return redirect('/')
+			return redirect('/home')
 
 		return render_template('login.html',strike=1)
 		
@@ -86,11 +88,15 @@ def newpost():
 def logout():
 	session['loggedin'] = False
 	session['username'] = "None"
-	return redirect('/')
+	return redirect('/home')
 
 @app.route('/<post_author>/<entry>/')
 def viewpost(entry,post_author):
+	user = models.User(post_author)
 	loggedin = check_session()
+
+	if not user.exists():
+		abort(404)
 
 	post_directory = os.path.join(os.path.join(os.path.join('templates','blogposts'),post_author),'{}.html'
 		.format(entry))
@@ -103,6 +109,9 @@ def user_home(username):
 	loggedin = check_session()
 	user = models.User(username)
 	posts = user.user_homepage()
+	
+	if not user.exists():
+		abort(404)	
 
 	post_content = []
 	for post in posts:
@@ -146,7 +155,6 @@ def settings():
 	loggedin = session['loggedin']
 	
 	if loggedin:
-
 		if request.method == 'GET':
 			return render_template('settings.html')
 
@@ -162,8 +170,8 @@ def settings():
 if socket.gethostname() == "DESKTOP-D18" :
 	if __name__ == '__main__':
 		app.secret_key=os.urandom(24)
-		app.run(host=os.getenv('IP', '127.0.0.1'),port=int(os.getenv('PORT', 8080)),debug=True)
+		app.run(host=os.getenv('IP', '127.0.0.1'),port=int(os.getenv('PORT', 8080)),debug=True,treaded=True)
 else :
 	if __name__ == '__main__':
 		app.secret_key=os.urandom(24)
-		app.run(host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)),debug=True)
+		app.run(host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)),debug=True,threaded=True)

@@ -113,3 +113,15 @@ class User:
 
 	def update_settings(self,name,bio):
 		self.conn.execute("""UPDATE users SET name = {}, bio={} WHERE username={}""".format(name,bio,self.username))
+
+	def exists(self):
+		cur = self.conn.execute("SELECT * FROM users WHERE username='{}'".format(self.username))
+		
+		for x in cur:
+			if x[0] is True:
+				return False
+
+			else:
+				return True
+			break
+		

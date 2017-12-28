@@ -109,6 +109,8 @@ def user_home(username):
 	loggedin = check_session()
 	user = models.User(username)
 	posts = user.user_homepage()
+	bio = "Lorem Ipsum"
+	dp_path = "https://avatars1.githubusercontent.com/u/28809479?s=460&v=4"
 	
 	if not user.exists():
 		abort(404)	
@@ -119,7 +121,7 @@ def user_home(username):
 		post_content.append(post_text)
 
 	return render_template('user-home.html',loggedin=loggedin,post_content=post_content,user=username,
-		full_name=user.get_name())
+		full_name=user.get_name(),bio=bio,photo=dp_path)
 
 
 
@@ -135,12 +137,14 @@ def register():
 		email = request.form['email']
 		password = request.form['password']
 		password_confirm = request.form['password-confirm']
+		bio = request.form['bio']
+		avatar = request.form['avatar']
 		
 		if password != password_confirm:
 			return render_template('register.html',strike=4)
 		
 		user = models.User(username,name,email,password)
-		strike = user.register()
+		strike = user.register(bio,avatar)
 		if strike != 0:
 			return render_template('register.html',strike=strike)
 		

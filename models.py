@@ -6,7 +6,7 @@ import hashlib
 class Blogpost:
 
 	def __init__(self,title=None,author=None):
-		self.conn = sqlite3.connect('blog-data.db')
+		self.conn = sqlite3.connect('data.db')
 		self.title = title
 		self.author = author
 		self.datetime = time.ctime()
@@ -60,13 +60,13 @@ class Blogpost:
 
 class User:
 	def __init__(self,username,name=None,email=None,password=None):
-		self.conn = sqlite3.connect('blog-data.db')
+		self.conn = sqlite3.connect('data.db')
 		self.username = username
 		self.name = name
 		self.email = email
 		self.password = password
 	
-	def register(self):
+	def register(self,bio,avatar):
 		if self.name == "" or self.email == "" or self.password == "":
 			return 1
 
@@ -83,8 +83,8 @@ class User:
 			return 3
 			break			
 		else:
-			self.conn.execute("INSERT INTO users (name,username,email,password) VALUES('{}','{}','{}','{}')"
-				.format(self.name,self.username,self.email,password_hashed.hexdigest()))
+			self.conn.execute("INSERT INTO users (name,username,email,password,bio,dp) VALUES('{}','{}','{}','{}','{}','{}')"
+				.format(self.name,self.username,self.email,password_hashed.hexdigest()),bio,avatar)
 			self.conn.commit()
 			return 0
 

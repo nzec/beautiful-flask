@@ -81,7 +81,7 @@ class User:
 			return 3
 			break			
 		else:
-			self.conn.execute("INSERT INTO users (name,username,email,password,bio,dp) VALUES('{}','{}','{}','{}','{}','{}')"
+			self.conn.execute("INSERT INTO users (name,username,email,password,bio,avatar) VALUES('{}','{}','{}','{}','{}','{}')"
 .format(self.name,self.username,self.email,password_hashed.hexdigest(),bio,avatar))
 			self.conn.commit()
 			return 0
@@ -128,7 +128,7 @@ class User:
 		for x in cur:
 			return x[0]	
 	def get_avatar(self):
-		cur = self.conn.execute("SELECT dp FROM users WHERE username = '{}' ".format(self.username))
+		cur = self.conn.execute("SELECT avatar FROM users WHERE username = '{}' ".format(self.username))
 		for x in cur:
 			return x[0]
 	def get_time(self):

@@ -16,7 +16,7 @@ class Blogpost:
 			self.post_directory = self.make_directory()
 
 	def write_to_file(self,content):
-		self.content = content		
+		self.content = content.decode("utf-8",'ignore')
 		self.file = open(os.path.join(self.post_directory,self.title+".html"),'w')
 		self.file.write("""
 			<title>{}</title>

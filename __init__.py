@@ -75,7 +75,7 @@ def newpost():
 
 	elif request.method == 'POST':
 		
-		post_content = request.form['content']
+		post_content = request.form['content'].encode("utf-8","igonre")
 		post_title = request.form['title']
 		post_author = session['username']
 

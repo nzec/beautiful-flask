@@ -92,7 +92,7 @@ footer .col-md-6 a svg {
 	font-size: 22px;
 }
 #content .card .card-text {
-	font-weight: thin;
+	text-transform: none;
 }
 #content a {
 	color: #212529;
@@ -120,4 +120,10 @@ button {
 }
 .card-user {
 	padding: 0;
+}
+
+.post-subt {
+	margin-top: 15px;
+	font-size: 15px;
+	text-transform: capitalize;
 }

@@ -23,8 +23,8 @@
 					  	<div class="card-body">
 					  			<div class="card-header">{{ post.title.string }}</div>
 					  			<div class="card-body">
-					  				{% if post.p.string.__len__() > 750 %}
-							    	<p class="card-text">{{ post.p.string }}...</p>
+					  				{% if post.p.string.__len__() > 350 %}
+							    	<p class="card-text">{{ post.p.string[:350] }}...</p>
 							    	{% else %}
 							    	<p class="card-text">{{ post.p.string }}</p>
 							    	{% endif %}

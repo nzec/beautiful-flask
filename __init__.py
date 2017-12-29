@@ -95,6 +95,8 @@ def logout():
 def viewpost(entry,post_author):
 	user = models.User(post_author)
 	loggedin = check_session()
+	blogpost = models.Blogpost()
+
 
 	if not user.exists():
 		abort(404)
@@ -104,7 +106,7 @@ def viewpost(entry,post_author):
 	post_content = open(post_directory,'r').read()
 	
 	return render_template('blogpost.html',title=entry, post_link=entry,loggedin=loggedin,author=post_author,
-		name=user.get_name(),datetime=user.get_time())
+		name=user.get_name(),datetime=blogpost.get_time())
 
 @app.route('/<username>')
 @app.route('/<username>/')

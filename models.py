@@ -21,14 +21,13 @@ class Blogpost:
 		self.file.write("""
 			<title>{}</title>
 			<body>
-				<div class="container hero"><h1>{}</h1><hr></div><div class="container"><p>{}</p></div>
-				</div>
+				<div class="container hero"><h1>{}</h1><small class="form-text text-muted post-subt">- Posted by <b>{}</b> On <b>{}</b></small><hr></div><div class="container"><p>{}</p></div>
 			</body>
 			<div id="metadata" style = "display: none">
 			<div id = "author">{}</div>
 			<div id = "datetime">{}</div>
 			</div>
-			""".format(self.title,self.title,self.content,self.author,self.datetime,self.title))
+			""".format(self.title,self.title,self.author,self.datetime,self.content,self.author,self.datetime,self.title))
 		self.file.close()
 
 	def save(self,content):
@@ -56,6 +55,11 @@ class Blogpost:
 			pass
 		return os.path.join(os.path.join('templates','blogposts'),self.author)
 
+	def get_time(self):
+			cur = self.conn.execute("SELECT datetime FROM posts WHERE author = '{}' ".format(self.author))
+			for x in cur:
+				return x[0]
+
 class User:
 	def __init__(self,username,name=None,email=None,password=None):
 		self.conn = sqlite3.connect('data.db')
@@ -67,6 +71,9 @@ class User:
 	def register(self,bio,avatar):
 		if self.name == "" or self.email == "" or self.password == "":
 			return 1
+
+		if avatar == "":
+			avatar = "/static/img/avatar.png"
 
 		password_hashed = hashlib.new('sha224')
 		password_hashed.update(bytes(self.password,'utf-8'))
@@ -94,7 +101,6 @@ class User:
 			if hashlib.sha224(bytes(passwrd,'utf-8')).hexdigest() == x[0]:
 				return True
 				break
-
 			else:
 				return False
 				break
@@ -131,7 +137,4 @@ class User:
 		cur = self.conn.execute("SELECT avatar FROM users WHERE username = '{}' ".format(self.username))
 		for x in cur:
 			return x[0]
-	def get_time(self):
-		cur = self.conn.execute("SELECT datetime FROM posts WHERE author = '{}' ".format(self.username))
-		for x in cur:
-			return x[0]
+	

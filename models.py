@@ -4,61 +4,48 @@ import sqlite3
 import hashlib
 
 class Blogpost:
-
-	def __init__(self,title=None,author=None):
+	def __init__(self,id=None):
 		self.conn = sqlite3.connect('data.db')
-		self.title = title
-		self.author = author
-		self.datetime = time.ctime()
-		self.timestamp = time.time()
+		self.id = id
 
-		if self.author != None:
-			self.post_directory = self.make_directory()
-
-	def write_to_file(self,content):
-		self.content = content.decode("utf-8",'ignore')
-		self.file = open(os.path.join(self.post_directory,self.title+".html"),'w')
-		self.file.write("""
-			<title>{}</title>
-			<body>
-				<div class="container hero"><h1>{}</h1><small class="form-text text-muted post-subt">- Posted by <b>{}</b> On <b>{}</b></small><hr></div><div class="container"><p>{}</p></div>
-			</body>
-			<div id="metadata" style = "display: none">
-			<div id = "author">{}</div>
-			<div id = "datetime">{}</div>
-			</div>
-			""".format(self.title,self.title,self.author,self.datetime,self.content,self.author,self.datetime,self.title))
-		self.file.close()
-
-	def save(self,content):
-		self.conn.execute("""INSERT INTO posts (title, author, datetime, timestamp,path) VALUES('{}','{}','{}',
-			'{}','{}')
-			""".format(self.title,self.author,self.datetime,self.timestamp,	os.path.join(self.post_directory,
-				self.title+".html")))
-
-		self.write_to_file(content)
+		self.author = None
+		self.title = None
+		self.content = None
+		self.datetime = None
+		self.timestamp = None
+				
+	def save(self,title,author,content):
+		self.conn.execute("""INSERT INTO posts (title, author, datetime, timestamp, content) VALUES('{}','{}','{}',
+			'{}',"{}")
+			""".format(title , author , time.ctime() , time.time() , content ))
 		self.conn.commit()
 
-	def remove_spaces(self):
-		x=""
-		for char in range(len(self.title)):
-			if self.title[char] == " ":
-				x+=""
-			else:
-				x+=self.title[char]
-		return x
-	
-	def make_directory(self):
-		try:
-			os.mkdir(os.path.join(os.path.join('templates','blogposts'),self.author))
-		except:
-			pass
-		return os.path.join(os.path.join('templates','blogposts'),self.author)
+	def set_data(self):
+		cur = self.conn.execute("SELECT title FROM posts WHERE id = '{}' ".format(self.id))
+		for x in cur:
+			self.title =  x[0]
+			break
 
-	def get_time(self):
-			cur = self.conn.execute("SELECT datetime FROM posts WHERE author = '{}' ".format(self.author))
-			for x in cur:
-				return x[0]
+		cur = self.conn.execute("SELECT author FROM posts WHERE id = '{}' ".format(self.id))
+		for x in cur:
+			self.author = x[0]
+			break
+
+		cur = self.conn.execute("SELECT content FROM posts WHERE id = '{}' ".format(self.id))
+		for x in cur:
+			self.content = x[0]
+			break
+
+		cur = self.conn.execute("SELECT datetime FROM posts WHERE id = '{}' ".format(self.id))
+		for x in cur:
+			self.datetime = x[0]
+			break
+
+		cur = self.conn.execute("SELECT timestamp FROM posts WHERE id = '{}' ".format(self.id))
+		for x in cur:
+			self.timestamp = x[0]
+			break
+
 
 class User:
 	def __init__(self,username,name=None,email=None,password=None):

@@ -5,9 +5,11 @@ import random
 import models
 import os
 import socket
+import html2text
 
 
 app = Flask(__name__)
+h = html2text.HTML2Text()
 
 def check_session():
 	try:
@@ -31,15 +33,15 @@ def page_not_found(e):
 def home():
 	loggedin = check_session()
 
-	blogpost = models.Blogpost()
-
-	posts = blogpost.conn.execute("SELECT path FROM posts ORDER BY timestamp DESC")
-
+	conn = sqlite3.connect('data.db')
+	posts = conn.execute("SELECT id FROM posts ORDER BY timestamp DESC")
 	post_content = []
-	
-	for post in posts:
-		post_text =	BeautifulSoup(open(post[0],'r').read(),'html.parser')
-		post_content.append(post_text)
+
+	for each in posts:
+		post = models.Blogpost(each[0])
+		post.set_data()
+
+		post_content.append(post)
 
 	return render_template('home.html',loggedin=loggedin,post_content=post_content)
 
@@ -79,8 +81,8 @@ def newpost():
 		post_title = request.form['title']
 		post_author = session['username']
 
-		blogpost = models.Blogpost(post_title,post_author)
-		blogpost.save(post_content)
+		blogpost = models.Blogpost()
+		blogpost.save(post_title,post_author,h.handle(post_content))
 
 		return render_template('success.html',link=post_title,user=post_author)
 		
@@ -95,18 +97,14 @@ def logout():
 def viewpost(entry,post_author):
 	user = models.User(post_author)
 	loggedin = check_session()
-	blogpost = models.Blogpost()
-
+	
+	blogpost = models.Blogpost(entry)
+	blogpost.set_data()
 
 	if not user.exists():
 		abort(404)
 
-	post_directory = os.path.join(os.path.join(os.path.join('templates','blogposts'),post_author),'{}.html'
-		.format(entry))
-	post_content = open(post_directory,'r').read()
-	
-	return render_template('blogpost.html',title=entry, post_link=entry,loggedin=loggedin,author=post_author,
-		name=user.get_name(),datetime=blogpost.get_time())
+	return render_template('blogpost.html',loggedin=loggedin,)
 
 @app.route('/<username>')
 @app.route('/<username>/')
